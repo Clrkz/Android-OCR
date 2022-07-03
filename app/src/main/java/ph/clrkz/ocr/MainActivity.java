@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2022 Nicolò Cantori
+ * Copyright (c) 2022 Clarence Andaya
  *
  * This file is part of OCR Camera.
  *
