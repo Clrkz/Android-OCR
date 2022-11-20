@@ -1,20 +1,18 @@
-/*
+/* Android-OCR -- simple OCR Android app
  * Copyright (c) 2022 Nicolò Cantori, Clarence Andaya
  *
- * This file is part of OCR Camera.
- *
- * OCR Camera is free software: you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * OCR Camera is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OCR Camera. If not, see <http ://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package ph.clrkz.ocr;
@@ -72,16 +70,15 @@ public class MainActivity extends AppCompatActivity {
     private File photoFile;
     Uri image_uri;
 
-    private static final int CAMERA_REQUEST_CODE=200;
-    private static final int STORAGE_REQUEST_CODE=400;
-    private static final int IMAGE_PICK_GALLERY_CODE=1000;
-    private static final int IMAGE_PICK_CAMERA_CODE=1001;
-    private static final int WRITE_EXTERNAL_STORAGE_CODE=1;
+    private static final int CAMERA_REQUEST_CODE = 200;
+    private static final int STORAGE_REQUEST_CODE = 400;
+    private static final int IMAGE_PICK_GALLERY_CODE = 1000;
+    private static final int IMAGE_PICK_CAMERA_CODE = 1001;
+    private static final int WRITE_EXTERNAL_STORAGE_CODE = 1;
 
     String cameraPermission[];
     String storagePermission[];
-
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,8 +94,8 @@ public class MainActivity extends AppCompatActivity {
 
         Button selectPicture = findViewById(R.id.button2);
         selectPicture.setOnClickListener(v -> onSelectPicture());
-        cameraPermission=new String[]{Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        storagePermission=new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        cameraPermission = new String[] {Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        storagePermission = new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText("", textView.getText());
                 clipboard.setPrimaryClip(clip);
-                Toast.makeText(MainActivity.this, "Copied to clipboard", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Copied to clipboard.", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -114,24 +111,24 @@ public class MainActivity extends AppCompatActivity {
     private void onSelectPicture() {
         String[] items={" Camera"," Gallery"};
         AlertDialog.Builder dialog= new AlertDialog.Builder(this);
-        dialog.setTitle("Select Image");
+        dialog.setTitle("Select image.");
         dialog.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                if(which==0){
-                    if(!checkCameraPermission()){
+                if (which == 0){
+                    if (!checkCameraPermission()) {
                         requestCameraPermission();
                     }
-                    else{
+                    else {
                         pickCamera();
                     }
                 }
-                if(which==1){
-                    if(!checkStoragePermission()){
+                if (which == 1) {
+                    if (!checkStoragePermission()) {
                         requestStoragePermission();
                     }
-                    else{
+                    else {
                         pickGallery();
                     }
                 }
@@ -143,18 +140,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK){
-            if(requestCode==IMAGE_PICK_GALLERY_CODE){
+        if (resultCode == RESULT_OK) {
+            if (requestCode == IMAGE_PICK_GALLERY_CODE) {
                 CropImage.activity(data.getData()).setGuidelines(CropImageView.Guidelines.ON).start(this);
             }
-            if(requestCode==IMAGE_PICK_CAMERA_CODE){
+            if (requestCode == IMAGE_PICK_CAMERA_CODE) {
                 CropImage.activity(image_uri).setGuidelines(CropImageView.Guidelines.ON).start(this);
             }
 
-            if(requestCode==CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
-                CropImage.ActivityResult result=CropImage.getActivityResult(data);
-                if(resultCode== RESULT_OK){
-                    Uri resultUri=result.getUri();
+            if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+                CropImage.ActivityResult result = CropImage.getActivityResult(data);
+                if (resultCode == RESULT_OK) {
+                    Uri resultUri = result.getUri();
                     try{
                         photoFile = getFile(getApplicationContext(),resultUri);
                     }catch(Exception e){
@@ -188,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
 
-                } else if(resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                     Exception error = result.getError();
                     Toast.makeText(this, "" + error, Toast.LENGTH_SHORT).show();
                 }
@@ -202,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean checkStoragePermission() {
-        boolean result= ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)==(PackageManager.PERMISSION_GRANTED);
+        boolean result = ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
         return result;
     }
 
@@ -212,24 +209,24 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean checkCameraPermission(){
 
-        boolean result= ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA)==(PackageManager.PERMISSION_GRANTED);
-        boolean result1= ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)==(PackageManager.PERMISSION_GRANTED);
+        boolean result = ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA) == (PackageManager.PERMISSION_GRANTED);
+        boolean result1= ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
 
         return result && result1;
 
     }
     private void pickCamera() {
-        ContentValues values= new ContentValues();
+        ContentValues values = new ContentValues();
         values.put(MediaStore.Images.Media.TITLE,"NewPic");
         values.put(MediaStore.Images.Media.DESCRIPTION,"Image To Text");
-        image_uri=getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,values);
-        Intent cameraIntent= new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        image_uri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,values);
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,image_uri);
         startActivityForResult(cameraIntent,IMAGE_PICK_CAMERA_CODE);
     }
 
     private void pickGallery() {
-        Intent intent=new Intent(Intent.ACTION_PICK);
+        Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
         startActivityForResult(intent,IMAGE_PICK_GALLERY_CODE);
     }
