@@ -1,6 +1,5 @@
 /*
- * Copyright (c) 2022 Nicolò Cantori
- * Copyright (c) 2022 Clarence Andaya
+ * Copyright (c) 2022 Nicolò Cantori, Clarence Andaya
  *
  * This file is part of OCR Camera.
  *
@@ -164,28 +163,6 @@ public class MainActivity extends AppCompatActivity {
 
                     Bitmap bitmap = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
                     if (bitmap != null) {
-                        /* Rotate the image if necessary: */
-//                        try {
-//                            ExifInterface exif = new ExifInterface(photoFile.getAbsolutePath());
-//                            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
-//                            int rotation = 0;
-//                            switch (orientation) {
-//                                case ExifInterface.ORIENTATION_ROTATE_90:
-//                                    rotation = 90;
-//                                    break;
-//                                case ExifInterface.ORIENTATION_ROTATE_180:
-//                                    rotation = 180;
-//                                    break;
-//                                case ExifInterface.ORIENTATION_ROTATE_270:
-//                                    rotation = 270;
-//                                    break;
-//                            }
-//                            if (rotation > 0) {
-//                                Matrix matrix = new Matrix();
-//                                matrix.postRotate(rotation);
-//                                bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-//                            }
-//                        } catch (IOException ignored) {}
 
                         ImageView ivPhoto = findViewById(R.id.imageView);
                         ivPhoto.setImageBitmap(bitmap);
@@ -211,9 +188,9 @@ public class MainActivity extends AppCompatActivity {
                     }
 
 
-                } else if(resultCode==CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE){
-                    Exception error=result.getError();
-                    Toast.makeText(this, ""+error, Toast.LENGTH_SHORT).show();
+                } else if(resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                    Exception error = result.getError();
+                    Toast.makeText(this, "" + error, Toast.LENGTH_SHORT).show();
                 }
             }
         }
